@@ -78,6 +78,47 @@ graph TD
     C -->|Mint Shares| A
     C -->|Liquidity Provision| E[Blend / Yield Source]
     E -->|Interest Accrual| C
+
+    graph TD
+    %% Define Nodes
+    User([User with Freighter Wallet])
+    subgraph "Frontend Application (Next.js)"
+        UI[User Interface / Dashboard]
+        WContext[WalletContext (State/Signing)]
+        VContext[VaultContext (Polling/TVL)]
+        LibWrap[lib/contract-wrapper.ts]
+    end
+    subgraph "Stellar Network (Testnet)"
+        RPC[Soroban RPC Node]
+        Horizon[Horizon API (Sequence Numbers)]
+        subgraph "Smart Contracts"
+            VaultC[[Vault Contract]]
+            TokenC[[Token Contract (rUSDC)]]
+        end
+    end
+
+    %% Define Interactions
+    User <-->|Interacts/Connects| UI
+    UI <-->|Reads State| VContext
+    UI <-->|Triggers Actions| LibWrap
+    LibWrap <-->|Checks Connection/Requests Sign| WContext
+    WContext <-->|Signs Transaction| User
+    
+    %% Contract Interaction
+    VContext -->|High-Speed Polling| RPC
+    LibWrap -->|Submit Signed Tx| RPC
+    LibWrap -->|Query Nonce| Horizon
+    
+    RPC <-->|Execute/Query| VaultC
+    VaultC <-->|Transfer Assets/Check Allowance| TokenC
+    VaultC -.->|Yield Source| Blend[Future: Blend Integration]
+
+    %% Styling
+    style User fill:#f9f,stroke:#333,stroke-width:2px
+    style VaultC fill:#ff9,stroke:#333,stroke-width:2px
+    style TokenC fill:#ff9,stroke:#333,stroke-width:2px
+    style Blend fill:#ddd,stroke:#f00,stroke-width:1px,stroke-dasharray: 5 5
+    
 ## 📜 Smart Contract Overview
 1. Token Contract (rUSDC)
 A standard-compliant Stellar asset implementation that handles:
