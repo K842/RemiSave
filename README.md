@@ -21,13 +21,13 @@ This repository uses the recommended structure for a Soroban project:
 - Contracts should have their own `Cargo.toml` files that rely on the top-level `Cargo.toml` workspace for their dependencies.
 - Frontend libraries can be added to the top-level directory as well. If you initialized this project with a frontend template via `--frontend-template` you will have those files already included.
 
-RemiSave: Yield-Bearing Remittance Vaults on Stellar
+#RemiSave: Yield-Bearing Remittance Vaults on Stellar
 Empowering global workers with high-yield savings and low-cost cross-border transfers.
 
-📄 One-line Description
+##📄 One-line Description
 RemiSave is a decentralized finance (DeFi) protocol built on Stellar Soroban that transforms traditional remittances into yield-generating assets through automated liquidity vaults.
 
-❓ Problem It Solves (Remittance Context)
+##❓ Problem It Solves (Remittance Context)
 High Costs: Traditional remittance corridors to India and emerging markets often charge 5-7% in fees, significantly eating into the savings of migrant workers.
 
 Idle Capital: Once money is sent, it typically sits in non-interest-bearing accounts, losing value to inflation.
@@ -36,7 +36,7 @@ Complexity: Most DeFi solutions are too complex for non-technical users, requiri
 
 Financial Exclusion: Millions remain unbanked or underbanked, lacking access to professional-grade yield-generating financial instruments.
 
-✅ Solution / How It Works
+##✅ Solution / How It Works
 RemiSave bridges the gap between cross-border payments and DeFi yield.
 
 On-Ramp: Users convert local fiat to stablecoins (like rUSDC).
@@ -47,7 +47,7 @@ Yield Generation: The Vault interacts with lending protocols (like Blend) to ear
 
 Flexible Withdrawal: Users can withdraw their principal plus accrued yield at any time, or send it directly to a recipient.
 
-✨ Key Features
+##✨ Key Features
 Smart Vaults: Automated yield optimization that moves capital to the most efficient lending pools.
 
 Atomic Transactions: Uses Soroban’s advanced footprinting to ensure "Approve + Deposit" happens securely in a single user-signed flow.
@@ -58,7 +58,7 @@ Developer Faucet: Integrated testing tools to mint rUSDC for sandbox experimenta
 
 Non-Custodial: Users maintain full control of their funds via the Freighter Wallet; RemiSave never takes custody of private keys.
 
-🛠 Tech Stack
+##🛠 Tech Stack
 Blockchain: Stellar Soroban (Rust Smart Contracts).
 
 Frontend: Next.js 14, TypeScript, Tailwind CSS.
@@ -69,7 +69,7 @@ SDKs: @stellar/stellar-sdk, @stellar/freighter-api.
 
 UI Components: Shadcn UI, Radix UI, Lucide Icons.
 
-📐 Architecture Diagram
+##📐 Architecture Diagram
 Code snippet
 graph TD
     A[User / Freighter Wallet] -->|Approve + Deposit| B[RemiSave Frontend]
@@ -78,7 +78,7 @@ graph TD
     C -->|Mint Shares| A
     C -->|Liquidity Provision| E[Blend / Yield Source]
     E -->|Interest Accrual| C
-📜 Smart Contract Overview
+##📜 Smart Contract Overview
 1. Token Contract (rUSDC)
 A standard-compliant Stellar asset implementation that handles:
 
@@ -97,7 +97,7 @@ withdraw: Burns shares and returns the proportional amount of underlying assets 
 
 get_tvl: Returns the current total value locked in the contract.
 
-🚀 Deployment Details
+##🚀 Deployment Details
 Network: Stellar Testnet.
 
 Vault Contract ID: CB75... (Check your .env for your specific deployment).
@@ -106,7 +106,7 @@ Token Contract ID: CAO... (Check your .env for your specific deployment).
 
 Explorer: Stellar Expert (Testnet).
 
-💻 How to Run Locally
+##💻 How to Run Locally
 Clone & Install:
 
 Bash
@@ -135,10 +135,10 @@ UPI Integration: Exploring anchors that allow direct off-ramping to Indian UPI I
 
 RemiVault Mobile: A lightweight mobile-first version for easier access in low-bandwidth regions.
 
-⚖ Competitive Differentiation
+##⚖ Competitive Differentiation
 Unlike standard remittance apps (Wise, Western Union), RemiSave is programmable. It doesn't just send money; it puts that money to work. Compared to other DeFi apps, RemiSave abstracts the complexity of liquidity provision into a simple "Savings Account" interface tailored for the remittance corridor.
 
-🛡 Security Considerations & Risks
+##🛡 Security Considerations & Risks
 Smart Contract Risk: The protocol relies on the security of Soroban. While the SDK is robust, contracts should undergo professional audits before Mainnet.
 
 Liquidity Risk: Yield depends on the availability of liquidity in underlying lending protocols like Blend.
