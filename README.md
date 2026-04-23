@@ -46,6 +46,8 @@ Deposit: Stablecoins are deposited into the RemiSave Vault.
 Yield Generation: The Vault interacts with lending protocols (like Blend) to earn interest on the deposited capital.
 
 Flexible Withdrawal: Users can withdraw their principal plus accrued yield at any time, or send it directly to a recipient.
+<img width="1391" height="796" alt="use flow_1" src="https://github.com/user-attachments/assets/6ec246fe-39c2-4af3-9f32-10c8655df80d" />
+
 
 ## ✨ Key Features
 Smart Vaults: Automated yield optimization that moves capital to the most efficient lending pools.
@@ -136,6 +138,9 @@ Revenue Fee Logic: Implementing a small protocol fee on yield to ensure project 
 UPI Integration: Exploring anchors that allow direct off-ramping to Indian UPI IDs.
 
 RemiVault Mobile: A lightweight mobile-first version for easier access in low-bandwidth regions.
+
+<img width="1400" height="835" alt="future _1" src="https://github.com/user-attachments/assets/9a6154f5-2a95-4090-a981-51ecb59b290c" />
+
 
 ## ⚖ Competitive Differentiation
 Unlike standard remittance apps (Wise, Western Union), RemiSave is programmable. It doesn't just send money; it puts that money to work. Compared to other DeFi apps, RemiSave abstracts the complexity of liquidity provision into a simple "Savings Account" interface tailored for the remittance corridor.
