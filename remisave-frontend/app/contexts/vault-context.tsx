@@ -95,12 +95,14 @@ export function VaultProvider({ children }: { children: React.ReactNode }) {
     return () => clearTimeout(timer)
   }, [refreshVaultState])
 
-  // Refresh user position when wallet connects
+  // Refresh user position when wallet connects, or clear it on disconnect
   useEffect(() => {
     if (publicKey) {
       refreshUserPosition().catch(err => {
         console.error('[v0] Initial user position fetch failed:', err)
       })
+    } else {
+      setUserPosition(null)
     }
   }, [publicKey, refreshUserPosition])
 
@@ -113,6 +115,11 @@ export function VaultProvider({ children }: { children: React.ReactNode }) {
       refreshVaultState().catch(err => {
         console.error('[v0] Auto-refresh vault state failed:', err)
       })
+      if (publicKey) {
+        refreshUserPosition().catch(err => {
+          console.error('[v0] Auto-refresh user position failed:', err)
+        })
+      }
     }, 10000)
 
     return () => clearInterval(interval)
