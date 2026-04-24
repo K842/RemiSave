@@ -4,9 +4,10 @@ import React, { useState } from 'react'
 import { useVault } from '@/app/contexts/vault-context'
 import { useWallet } from '@/app/contexts/wallet-context'
 import { useWithdrawVault } from '@/hooks/use-vault-operations'
-import { formatStellarAmount } from '@/lib/utils'
+import { formatStellarAmount, toStellarAmount, fromStellarAmount } from '@/lib/utils'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 import { Skeleton } from '@/components/ui/skeleton'
 import { AlertCircle } from 'lucide-react'
 
@@ -14,14 +15,38 @@ export function UserPosition() {
   const { isConnected } = useWallet()
   const { userPosition, isLoading, vaultState } = useVault()
   const { withdraw, isLoading: isWithdrawing, error: withdrawError } = useWithdrawVault()
-  const [showWithdrawConfirm, setShowWithdrawConfirm] = useState(false)
+  const [withdrawAmount, setWithdrawAmount] = useState<string>('')
+  const [isMax, setIsMax] = useState(false)
 
   const handleWithdraw = async () => {
     if (!userPosition || userPosition.shares === BigInt(0)) return
 
     try {
-      await withdraw(userPosition.shares)
-      setShowWithdrawConfirm(false)
+      let sharesToWithdraw = BigInt(0)
+      
+      if (isMax) {
+        sharesToWithdraw = userPosition.shares
+      } else {
+        const amount = toStellarAmount(withdrawAmount)
+        if (amount <= BigInt(0)) return
+        
+        // shares = (amount * totalShares) / totalDeposits
+        if (vaultState && vaultState.totalShares > BigInt(0) && vaultState.totalDeposits > BigInt(0)) {
+          sharesToWithdraw = (amount * vaultState.totalShares) / vaultState.totalDeposits
+        } else {
+          // Fallback if state is not fully loaded but user has position
+          sharesToWithdraw = amount
+        }
+
+        // Safety cap
+        if (sharesToWithdraw > userPosition.shares) {
+          sharesToWithdraw = userPosition.shares
+        }
+      }
+
+      await withdraw(sharesToWithdraw)
+      setWithdrawAmount('')
+      setIsMax(false)
     } catch (error) {
       console.error('Withdrawal failed:', error)
     }
@@ -53,18 +78,11 @@ export function UserPosition() {
     )
   }
 
-  if (!userPosition || (userPosition.shares === BigInt(0) && userPosition.amountDeposited === BigInt(0))) {
-    return (
-      <Card className="border-dashed bg-neutral-50 p-6 text-center">
-        <p className="text-sm font-medium text-neutral-700">No deposits yet</p>
-        <p className="text-xs text-neutral-500">Deposit rUSDC to start earning yield</p>
-      </Card>
-    )
-  }
+  const hasPosition = userPosition && (userPosition.shares > BigInt(0) || userPosition.amountDeposited > BigInt(0))
 
-  const totalValue = vaultState?.totalDeposits ? 
+  const totalValue = (vaultState?.totalDeposits && userPosition?.shares) ? 
     (userPosition.shares * vaultState.totalDeposits) / (vaultState.totalShares || BigInt(1)) 
-    : userPosition.amountDeposited
+    : (userPosition?.amountDeposited || BigInt(0))
 
   return (
     <Card className="bg-gradient-to-br from-primary/5 to-accent/5 p-6">
@@ -78,17 +96,17 @@ export function UserPosition() {
       )}
 
       <div className="space-y-4">
-        <div>
+        <div className="border-t border-neutral-200 pt-4">
           <p className="text-xs uppercase text-neutral-600 tracking-wide">Shares Owned</p>
           <p className="text-2xl font-bold text-primary">
-            {formatStellarAmount(userPosition.shares, 0)}
+            {formatStellarAmount(userPosition?.shares || BigInt(0), 0)}
           </p>
         </div>
 
         <div className="border-t border-neutral-200 pt-4">
           <p className="text-xs uppercase text-neutral-600 tracking-wide mb-1">Amount Deposited</p>
           <p className="text-lg font-semibold text-neutral-900">
-            {formatStellarAmount(userPosition.amountDeposited, 7)} rUSDC
+            {formatStellarAmount(userPosition?.amountDeposited || BigInt(0), 7)} rUSDC
           </p>
         </div>
 
@@ -102,42 +120,49 @@ export function UserPosition() {
         <div className="border-t border-neutral-200 pt-4">
           <p className="text-xs text-neutral-500">
             Last Deposit:{' '}
-            {userPosition.lastDepositTime
+            {userPosition?.lastDepositTime
               ? new Date(userPosition.lastDepositTime * 1000).toLocaleDateString()
               : 'N/A'}
           </p>
         </div>
       </div>
 
-      <div className="mt-6 space-y-2">
-        {!showWithdrawConfirm ? (
-          <Button
-            onClick={() => setShowWithdrawConfirm(true)}
-            variant="outline"
-            disabled={isWithdrawing}
-            className="w-full"
-          >
-            Withdraw
-          </Button>
-        ) : (
-          <>
-            <Button
-              onClick={handleWithdraw}
-              disabled={isWithdrawing}
-              className="w-full bg-red-500 hover:bg-red-600"
+      <div className="mt-6 space-y-4 pt-4 border-t border-neutral-200">
+        <div className="space-y-2">
+          <div className="flex justify-between text-xs text-neutral-500 px-1">
+            <span>Withdraw Amount (rUSDC)</span>
+            <button 
+              onClick={() => {
+                setWithdrawAmount(fromStellarAmount(totalValue))
+                setIsMax(true)
+              }}
+              className="text-primary hover:underline font-medium"
+              disabled={isWithdrawing || !hasPosition}
             >
-              {isWithdrawing ? 'Withdrawing...' : 'Confirm Withdraw'}
-            </Button>
-            <Button
-              onClick={() => setShowWithdrawConfirm(false)}
-              disabled={isWithdrawing}
-              variant="outline"
-              className="w-full"
-            >
-              Cancel
-            </Button>
-          </>
-        )}
+              Use Max
+            </button>
+          </div>
+          <Input
+            type="number"
+            value={withdrawAmount}
+            onChange={(e) => {
+              setWithdrawAmount(e.target.value)
+              setIsMax(false)
+            }}
+            step="0.0000001"
+            placeholder="0.0"
+            className="h-10 bg-white shadow-sm"
+            disabled={isWithdrawing || !hasPosition}
+          />
+        </div>
+        
+        <Button
+          onClick={handleWithdraw}
+          disabled={isWithdrawing || !hasPosition || !withdrawAmount || parseFloat(withdrawAmount) <= 0}
+          className="w-full bg-red-600 hover:bg-red-700 text-white font-semibold transition-colors shadow-sm"
+        >
+          {isWithdrawing ? 'Withdrawing...' : 'Confirm Withdrawal'}
+        </Button>
       </div>
     </Card>
   )
