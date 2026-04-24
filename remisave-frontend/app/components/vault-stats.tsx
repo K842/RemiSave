@@ -7,7 +7,7 @@ import { Card } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 
 export function VaultStats() {
-  const { vaultState, isLoading, error } = useVault()
+  const { vaultState, userPosition, isLoading, error } = useVault()
 
   if (isLoading) {
     return (
@@ -30,27 +30,31 @@ export function VaultStats() {
     )
   }
 
+  const totalValue = (vaultState?.totalDeposits && userPosition?.shares) ? 
+    (userPosition.shares * vaultState.totalDeposits) / (vaultState.totalShares || BigInt(1)) 
+    : (userPosition?.amountDeposited || BigInt(0))
+
   const stats = [
     {
-      label: 'Total Value Locked',
-      value: formatStellarAmount(vaultState.tvl, 7),
+      label: 'Your Deposit Value',
+      value: formatStellarAmount(totalValue, 7),
       suffix: 'rUSDC',
       color: 'blue',
     },
     {
-      label: 'Yield Rate',
+      label: 'Current Yield',
       value: (Number(vaultState.rate) / 100).toFixed(2),
       suffix: '%',
       color: 'green',
     },
     {
-      label: 'Total Shares',
-      value: formatStellarAmount(vaultState.totalShares, 0),
+      label: 'Your Shares',
+      value: formatStellarAmount(userPosition?.shares || BigInt(0), 0),
       suffix: 'shares',
       color: 'purple',
     },
     {
-      label: 'Status',
+      label: 'Vault Status',
       value: vaultState.paused ? 'Paused' : 'Active',
       suffix: '',
       color: vaultState.paused ? 'red' : 'green',
