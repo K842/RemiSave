@@ -1,6 +1,6 @@
 # RemiSave
 
-![CI Pipeline](https://github.com/YOUR_USERNAME/YOUR_REPO_NAME/actions/workflows/ci.yml/badge.svg)
+![CI](https://github.com/K842/RemiSave/actions/workflows/ci.yml/badge.svg)
 
 Empowering global workers with high-yield savings and low-cost cross-border transfers.
 
