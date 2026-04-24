@@ -70,7 +70,7 @@ async function callContractMethod(
     )
 
     const tx = txBuilder.setTimeout(30).build()
-    const response = await withTimeout(RPC_SERVER.simulateTransaction(tx), 10000)
+    const response = await withTimeout(RPC_SERVER.simulateTransaction(tx), 30000)
 
     // Check if response is an error
     if ('error' in response && response.error) {
@@ -303,7 +303,7 @@ export async function buildWithdrawalTransaction(
 export async function submitTransaction(signedTx: string): Promise<string> {
   try {
     const txObj = TransactionBuilder.fromXDR(signedTx, STELLAR_NETWORK) as any;
-    const response = await withTimeout(RPC_SERVER.sendTransaction(txObj), 10000)
+    const response = await withTimeout(RPC_SERVER.sendTransaction(txObj), 30000)
 
     if ('errorResultXdr' in response) {
       throw new Error(`Transaction submission failed: ${response.errorResultXdr}`)

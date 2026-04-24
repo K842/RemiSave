@@ -63,6 +63,10 @@ export function useDepositVault() {
 
         // Step 7: Submit deposit transaction
         const depositTxHash = await submitTransaction(signedDepositTx)
+        
+        // Wait for confirmation before refreshing
+        await waitForTransactionConfirmation(depositTxHash)
+        
         setTransactionStatus({ status: 'confirmed', hash: depositTxHash })
 
         // Refresh vault state
@@ -116,6 +120,10 @@ export function useWithdrawVault() {
 
         // Step 3: Submit withdrawal transaction
         const withdrawTxHash = await submitTransaction(signedWithdrawTx)
+        
+        // Wait for confirmation before refreshing
+        await waitForTransactionConfirmation(withdrawTxHash)
+        
         setTransactionStatus({ status: 'confirmed', hash: withdrawTxHash })
 
         // Refresh vault state
