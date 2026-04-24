@@ -5,8 +5,8 @@
 Empowering global workers with high-yield savings and low-cost cross-border transfers.
 
 ## 🔗 Smart Contract Details
-- **Token Contract Address**: `0x...`
-- **Vault Contract Address**: `0x...`
+- **Token Contract Address**: `CAOJETDKV6B2CK7LF7P2ZGGAM323BMDE4XAQZK6HDKFQUVOJDSGAI77Y`
+- **Vault Contract Address**: `CB75PSYWLHAI5FQXR4WBFEGVL7HOGCQP37O2C5357LVQGL5ZUR2EOK77`
 - **Network**: Stellar Testnet
 
 ## Project Structure
