@@ -1,7 +1,15 @@
-# Soroban Project
+# RemiSave
+
+![CI Pipeline](https://github.com/YOUR_USERNAME/YOUR_REPO_NAME/actions/workflows/ci.yml/badge.svg)
+
+Empowering global workers with high-yield savings and low-cost cross-border transfers.
+
+## 🔗 Smart Contract Details
+- **Token Contract Address**: `0x...`
+- **Vault Contract Address**: `0x...`
+- **Network**: Stellar Testnet
 
 ## Project Structure
-
 This repository uses the recommended structure for a Soroban project:
 
 ```text
@@ -17,12 +25,8 @@ This repository uses the recommended structure for a Soroban project:
 ```
 
 - New Soroban contracts can be put in `contracts`, each in their own directory. There is already a `hello_world` contract in there to get you started.
-- If you initialized this project with any other example contracts via `--with-example`, those contracts will be in the `contracts` directory as well.
 - Contracts should have their own `Cargo.toml` files that rely on the top-level `Cargo.toml` workspace for their dependencies.
-- Frontend libraries can be added to the top-level directory as well. If you initialized this project with a frontend template via `--frontend-template` you will have those files already included.
-
-# RemiSave: Yield-Bearing Remittance Vaults on Stellar
-Empowering global workers with high-yield savings and low-cost cross-border transfers.
+- Frontend libraries can be added to the top-level directory as well.
 
 ## 📄 One-line Description
 RemiSave is a decentralized finance (DeFi) protocol built on Stellar Soroban that transforms traditional remittances into yield-generating assets through automated liquidity vaults.
