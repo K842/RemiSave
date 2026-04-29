@@ -134,6 +134,12 @@ Bash
 npm run dev
 Connect: Open localhost:3000 and connect your Freighter wallet set to Testnet.
 
+## Demo video 
+https://youtu.be/0tetOn-lgC4
+<img width="1892" height="1033" alt="image" src="https://github.com/user-attachments/assets/2610fea9-1c0c-4ece-bd8d-72f05765c062" />
+<img width="1909" height="573" alt="Screenshot 2026-04-29 225521" src="https://github.com/user-attachments/assets/fe070047-3f53-442d-9fa5-564d573637ea" />
+
+
 ## 🗺 Future Roadmap
 Blend Protocol Integration: Real-time integration with the Blend Mainnet for production yield.
 
